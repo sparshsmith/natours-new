@@ -15,6 +15,7 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const compression = require('compression');
 
 const app = express();
 
@@ -65,6 +66,8 @@ app.use(hpp({
     ]
 }));
 
+// to compress text 
+app.use(compression())
 // Test middleware
 app.use((req, res, next) => {
     // console.log(req.cookies);
