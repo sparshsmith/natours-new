@@ -10,7 +10,7 @@
     "debug": "ndb server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js --watch",
-    "build:js": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js"
+    "build": "esbuild ./public/js/index.js --bundle --outfile=./public/js/bundle.js"
   },
   "author": "",
   "license": "ISC",
