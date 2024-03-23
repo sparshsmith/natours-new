@@ -10330,6 +10330,29 @@
       showAlert("error", "Error logging out. Try again!");
     }
   };
+  var signup = async (email, username, password, passwordConfirm) => {
+    try {
+      const res = await axios_default({
+        method: "POST",
+        url: "/api/v1/users/signup",
+        data: {
+          name: username,
+          email,
+          password,
+          passwordConfirm
+        }
+      });
+      console.log(res);
+      if (res.data.status === "success") {
+        showAlert("success", "Created account successfully!");
+        window.setTimeout(() => {
+          location.assign("/");
+        }, 0);
+      }
+    } catch (err) {
+      showAlert("error", err.response.data.message);
+    }
+  };
 
   // public/js/mapbox.js
   var displayMap = (locations) => {
@@ -10540,6 +10563,7 @@
   var accountForm = document.querySelector(".form-user-data");
   var passwordForm = document.querySelector(".form-user-password");
   var bookbtn = document.getElementById("book-tour");
+  var signupForm = document.querySelector(".form--signup");
   if (mapBox) {
     const locations = JSON.parse(mapBox.dataset.locations);
     displayMap(locations);
@@ -10584,6 +10608,16 @@
       e.target.textContent = "Processing...";
       const tourId = e.target.dataset.tourId;
       bookTour(tourId);
+    });
+  }
+  if (signupForm) {
+    signupForm.addEventListener("submit", (ev) => {
+      const email = document.getElementById("email").value;
+      const name = document.getElementById("name").value;
+      const password = document.getElementById("password").value;
+      const passwordConfirm = document.getElementById("passwordConfirm").value;
+      ev.preventDefault();
+      signup(email, name, password, passwordConfirm);
     });
   }
 })();
