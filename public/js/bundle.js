@@ -10353,6 +10353,45 @@
       showAlert("error", err.response.data.message);
     }
   };
+  var forgotPassword = async (email) => {
+    try {
+      const res = await axios_default({
+        method: "POST",
+        url: "/api/v1/users/forgotPassword",
+        data: {
+          email
+        }
+      });
+      console.log(res);
+      if (res.data.status === "success") {
+        showAlert("success", "Email sent! Please check your inbox.");
+      }
+    } catch (err) {
+      showAlert("error", err.response.data.message);
+    }
+  };
+  var resetPassword = async (email, password, passwordConfirm) => {
+    try {
+      const res = await axios_default({
+        method: "patch",
+        url: "/api/v1/users/resetPassword",
+        data: {
+          email,
+          password,
+          passwordConfirm
+        }
+      });
+      console.log(res);
+      if (res.data.status === "success") {
+        showAlert("success", "Email sent! Please check your inbox.");
+        window.setTimeout(() => {
+          location.assign("/");
+        }, 0);
+      }
+    } catch (err) {
+      showAlert("error", err.response.data.message);
+    }
+  };
 
   // public/js/mapbox.js
   var displayMap = (locations) => {
@@ -10564,6 +10603,8 @@
   var passwordForm = document.querySelector(".form-user-password");
   var bookbtn = document.getElementById("book-tour");
   var signupForm = document.querySelector(".form--signup");
+  var forgotPasswordForm = document.querySelector(".form--forgot_password");
+  var resetPasswordForm = document.querySelector(".form--reset-password");
   if (mapBox) {
     const locations = JSON.parse(mapBox.dataset.locations);
     displayMap(locations);
@@ -10618,6 +10659,22 @@
       const passwordConfirm = document.getElementById("passwordConfirm").value;
       ev.preventDefault();
       signup(email, name, password, passwordConfirm);
+    });
+  }
+  if (forgotPasswordForm) {
+    forgotPasswordForm.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const email = document.getElementById("email").value;
+      forgotPassword(email);
+    });
+  }
+  if (resetPasswordForm) {
+    resetPasswordForm.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const passwordConfirm = document.getElementById("passwordConfirm").value;
+      resetPassword(email, password, passwordConfirm);
     });
   }
 })();

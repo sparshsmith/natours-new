@@ -63,6 +63,12 @@ exports.getSignupForm = (req, res) => {
         })
 }
 
+exports.getForgotPasswordForm = (req, res) => {
+    res.status(200).render('forgotPassword', {
+        title: 'Forgot Password?'
+    })
+}
+
 exports.getAccount = (req, res) => {
     res.status(200).render('account', {
         title: 'Your account'
@@ -96,3 +102,9 @@ exports.getMyTours = catchAsync(async (req, res) => {
         tours
     })
 })
+
+exports.getResetPasswordForm = async (req, res) => {
+    res.status(200).render('resetPassword', {
+        title: "Reset Password"
+    })
+}

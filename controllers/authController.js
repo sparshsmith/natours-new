@@ -153,8 +153,12 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
 
     try {
-        // 3. Send it to user's mail
-        const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+        let resetURL;
+        if (req.query.api)
+            // 3. Send it to user's mail
+            resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+        else
+            resetURL = `${req.protocol}://${req.get('host')}/resetPassword/${resetToken}`;
 
         await new Email(user, resetURL).senPasswordReset();
         res.status(200).json({
@@ -196,6 +200,37 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
     // 4. login the user
     createAndSendToken(user, 200, res);
 });
+
+
+exports.checkUserToken = catchAsync(async (req, res, next) => {
+    // 1. Get user based on token
+    const hashedToken = crypto.createHash('sha256')
+        .update(req.params.token)
+        .digest('hex');
+
+    const user = await User.findOne({
+        passwordResetToken: hashedToken,
+        passwordResetExpires: { $gt: Date.now() }
+    });
+
+    // 2. if token is not expired and there is user, set the new password
+    if (!user) return next(new AppError('Token is invalid or has expired!', 400));
+
+    res.locals.user = user;
+    return next();
+});
+
+exports.resetPasswordUI = async (req, res, next) => {
+    const user = await User.findOne({ email: req.body.email });
+    user.password = req.body.password;
+    user.passwordConfirm = req.body.passwordConfirm;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+    // 4. login the user
+    createAndSendToken(user, 200, res);
+
+}
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
     // 1. Get the user

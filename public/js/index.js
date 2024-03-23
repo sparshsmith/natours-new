@@ -1,5 +1,5 @@
 import '@babel/polyfill'
-import { login, logout, signup } from './login'
+import { forgotPassword, login, logout, signup, resetPassword } from './login'
 import { displayMap } from './mapbox';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
@@ -12,6 +12,8 @@ const accountForm = document.querySelector('.form-user-data');
 const passwordForm = document.querySelector('.form-user-password');
 const bookbtn = document.getElementById('book-tour');
 const signupForm = document.querySelector('.form--signup');
+const forgotPasswordForm = document.querySelector('.form--forgot_password');
+const resetPasswordForm = document.querySelector('.form--reset-password');
 // VALUES
 
 
@@ -77,5 +79,23 @@ if (signupForm) {
         const passwordConfirm = document.getElementById('passwordConfirm').value;
         ev.preventDefault();
         signup(email, name, password, passwordConfirm)
+    })
+}
+
+if (forgotPasswordForm) {
+    forgotPasswordForm.addEventListener('submit', ev => {
+        ev.preventDefault();
+        const email = document.getElementById('email').value;
+        forgotPassword(email)
+    })
+}
+
+if (resetPasswordForm) {
+    resetPasswordForm.addEventListener('submit', ev => {
+        ev.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const passwordConfirm = document.getElementById('passwordConfirm').value;
+        resetPassword(email, password, passwordConfirm)
     })
 }

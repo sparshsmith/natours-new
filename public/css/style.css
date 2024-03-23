@@ -1317,6 +1317,18 @@ body {
   border-radius: 5px;
 }
 
+.forgot_password {
+  font-size: 12px;
+  margin-top: 0px;
+  margin-bottom: 18px;
+}
+
+.forgot_password_help_text {
+  font-size: 16px;
+  margin-top: 0px;
+  margin-bottom: 18px;
+}
+
 .form__input {
   display: block;
   font-family: inherit;
